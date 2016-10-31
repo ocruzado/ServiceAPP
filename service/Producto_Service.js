@@ -9,37 +9,16 @@ function Producto_Service() {
     this.listar = function (req, res) {
 
         console.log('Producto - listar');
-        console.log(req.body);
-
-        var nombre = req.body.nombre;
-        var categoria = req.body.categoria;
+        console.log(req.query);
 
 
-        // BD.Producto.findAll().then(function (result) {
-        //     var Productos = [];
-        //
-        //     Productos = result.map(function (obj) {
-        //         var producto = {
-        //             prod_Nombre: obj.prod_Nombre,
-        //             prod_Descripcion: obj.prod_Descripcion,
-        //             prod_Precio: obj.prod_Precio
-        //         }
-        //
-        //         return producto;
-        //     });
-        //
-        //    //res.header("Access-Control-Allow-Origin", req.header('Origin'));
-        //     res.send(Productos);
-        // });
+        var nombre = req.query.nombre;
+        var categoria = req.query.categoria;
 
 
         BD.Conex.query('call sp_Producto_listar(:nombre, :categoria)',
-            {replacements: {nombre: nombre, categoria: categoria}, type: conex.QueryTypes.SELECT}
+            {replacements: {nombre: nombre, categoria: categoria}, type: BD.Conex.QueryTypes.SELECT}
         ).then(function (result) {
-
-
-            //var desde = PageSize * (PageNumber - 1);
-            //var hasta = PageSize * (PageNumber);
 
             var lista_Object = result[0];
 
@@ -49,22 +28,21 @@ function Producto_Service() {
 
             TotalRows = lista_Array.length;
 
-            //var pagina = lista_Array.slice(desde, hasta)
-
-            //console.log(pagina);
-            //console.log(lista_Array);
-
+            res.send(200, {
+                total: TotalRows,
+                items: lista_Array
+            });
 
         });
     };
 
 
-    this.insertar = function (todo, res) {
+    this.insertar = function (req, res) {
         //res.header("Access-Control-Allow-Origin", '*');
         console.log('Producto - create');
-        console.log(todo.body);
+        console.log(req.body);
 
-        var producto = todo.body;
+        var producto = req.body;
 
         BD.Producto.create({
             prod_Nombre: producto.prod_Nombre,
@@ -77,15 +55,49 @@ function Producto_Service() {
             prod_CreadoPor: 'ocruzado',
             prod_FechaCreacion: new Date()
         }).then(function (obj) {
-            //obj.prod_IdProducto
-            //res.header("Access-Control-Allow-Origin", '*');
-            res.send("Nuevo ID: " + obj.prod_IdProducto);
+            res.send(200, 'obj.prod_IdProducto');
         });
-        //Connection.acquire(function (err, con) {
 
-        //res.send(todo);
+    };
 
-        //});
+    this.editar_Estado = function (req, res) {
+
+        console.log('Producto - editar_Estado');
+        console.log(req.body);
+
+        var id = req.body.id;
+        var estado = req.body.estado;
+        var usuario = req.body.usuario;
+
+        /*
+         BD.Producto.update(
+         {
+         prod_FlagActivo: estado,
+         prod_ModificadoPor: usuario,
+         prod_FechaModificacion: new Date(),
+         }, {
+         where: {
+         prod_IdProducto: id
+         }
+         });*/
+
+
+        BD.Producto.findById(id)
+            .then(function (obj) {
+
+                obj.updateAttributes({
+                    prod_FlagActivo: estado,
+                    prod_ModificadoPor: usuario,
+                    prod_FechaModificacion: new Date(),
+                }).succe
+
+
+            }).then(function (obj) {
+
+            res.send(200, 'obj.prod_IdProducto');
+        });
+
+
     };
 
 
