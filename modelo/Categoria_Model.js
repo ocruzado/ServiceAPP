@@ -13,24 +13,22 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT
         },
 
-
-
-        cate_FlagActivo: {
+        FlagActivo: {
             type: DataTypes.BOOLEAN
         },
-        cate_FlagEliminado: {
+        FlagEliminado: {
             type: DataTypes.BOOLEAN
         },
-        cate_CreadoPor: {
+        CreadoPor: {
             type: DataTypes.STRING(100)
         },
-        cate_FechaCreacion: {
+        FechaCreacion: {
             type: DataTypes.DATE
         },
-        cate_ModificadoPor: {
+        ModificadoPor: {
             type: DataTypes.STRING(100)
         },
-        cate_FechaModificacion: {
+        FechaModificacion: {
             type: DataTypes.DATE
         }
     },{

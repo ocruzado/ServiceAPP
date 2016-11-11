@@ -5,33 +5,47 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
+
+        prod_Codigo: {
+            type: DataTypes.STRING
+        },
+
         prod_Nombre: {
             type: DataTypes.STRING
         },
 
         prod_Descripcion: {
-            type: DataTypes.TEXT
+            type: DataTypes.STRING
         },
+
+        prod_Detalle: {
+            type: DataTypes.STRING(5000)
+        },
+
         prod_Precio: {
             type: DataTypes.DECIMAL(10,2)
         },
 
-        prod_FlagActivo: {
+        prod_Tags: {
+            type: DataTypes.STRING
+        },
+
+        FlagActivo: {
             type: DataTypes.BOOLEAN
         },
-        prod_FlagEliminado: {
+        FlagEliminado: {
             type: DataTypes.BOOLEAN
         },
-        prod_CreadoPor: {
+        CreadoPor: {
             type: DataTypes.STRING(100)
         },
-        prod_FechaCreacion: {
+        FechaCreacion: {
             type: DataTypes.DATE
         },
-        prod_ModificadoPor: {
+        ModificadoPor: {
             type: DataTypes.STRING(100)
         },
-        prod_FechaModificacion: {
+        FechaModificacion: {
             type: DataTypes.DATE
         }
     },{

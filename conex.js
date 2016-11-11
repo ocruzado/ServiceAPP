@@ -26,75 +26,18 @@ console.log("Cargando Modelos");
 var Producto_Model = conex.import(__dirname + "/modelo/Producto_Model");
 var Categoria_Model = conex.import(__dirname + "/modelo/Categoria_Model");
 
-Categoria_Model.hasMany(Producto_Model);
+Categoria_Model.hasMany(Producto_Model, {foreignKey: 'cate_IdCategoria'});
 
 module.exports.Conex = conex;
 module.exports.Producto = Producto_Model;
 module.exports.Categoria = Categoria_Model;
 
-/* EJEMPLO DE PAGINACION PARA UN SP EN MYSQL CON SEQUELIZER
-var PageNumber = 2;
-var PageSize = 8;
-var TotalRows = 0;
-
-function log(dataObject) {
+console.log("Sincronizando..");
+conex.sync({force: true});
+console.log("Terminado..");
 
 
-    var dataArray = new Array;
-    for (var o in dataObject) {
-        dataArray.push(dataObject[o]);
-    }
-}
-
-conex.query('call sp_Producto_listar(:nombre, :categoria)',
-    {raw: false, replacements: {nombre: 'nuevo', categoria: 1}, type: conex.QueryTypes.SELECT}
-).then(function (result) {
-
-
-    var desde = PageSize * (PageNumber - 1);
-    var hasta = PageSize * (PageNumber);
-
-    var lista_Object = result[0];
-
-    var lista_Array = Object.keys(lista_Object).map(function (k) {
-        return lista_Object[k]
-    });
-
-    TotalRows = lista_Array.length;
-
-    var pagina = lista_Array.slice(desde, hasta)
-
-    console.log(pagina);
-    console.log(lista_Array);
-    /*var result3 = [];
-     var keys = Object.keys(dataObject);
-     for (var i = 0, len = keys.length; i < len; i++) {
-     result3.push(dataObject[keys[i]]);
-     }
-
-
-     console.log(result3); */
-    /*
-     var dataArray = new Array;
-     for (var o in dataObject) {
-     dataArray.push(dataObject[o]);
-     }* /
-
-
-
-
-});
-*/
-
-//module.exports = Categoria_Model;
-//module.exports = Producto_Model;
-
-//console.log("Sincronizando..");
-//conex.sync({force: true});
-
-
-/*
- console.log("--Dommy Data--INICIO");
+/*console.log("--Dommy Data--INICIO");
 
  console.log("Producto - Datos de Prueba");
 
@@ -103,12 +46,14 @@ conex.query('call sp_Producto_listar(:nombre, :categoria)',
  var id = (i < 10 ? '0' + i : i);
  Producto_Model.create({
  prod_Nombre: 'Nuevo Producto  ' + id,
- prod_Descripcion: 'Descripcion '+ id,
- prod_Precio:  Math.random().toFixed(2),
- prod_FlagActivo:true,
- prod_FlagEliminado:false,
+ prod_Descripcion: 'Descripcion ' + id,
+ prod_Detalle: 'Detalle ' + id,
+ prod_Tags: 'Tag ' + id,
+ prod_Precio: Math.random().toFixed(2),
+ prod_FlagActivo: true,
+ prod_FlagEliminado: false,
 
- prod_CreadoPor:'ocruzado',
+ prod_CreadoPor: 'ocruzado',
  prod_FechaCreacion: new Date()
  });
  }
@@ -120,15 +65,84 @@ conex.query('call sp_Producto_listar(:nombre, :categoria)',
  var id = (i < 10 ? '0' + i : i);
  Categoria_Model.create({
  cate_Nombre: 'Nuevo Producto  ' + id,
- cate_Descripcion: 'Descripcion '+ id,
+ cate_Descripcion: 'Descripcion ' + id,
 
- cate_FlagActivo:true,
- cate_FlagEliminado:false,
+ cate_FlagActivo: true,
+ cate_FlagEliminado: false,
 
- cate_CreadoPor:'ocruzado',
+ cate_CreadoPor: 'ocruzado',
  cate_FechaCreacion: new Date()
  });
  }
 
- console.log("--Dommy Data--FIN");
+ console.log("--Dommy Data--FIN");*/
+
+
+
+
+
+
+
+
+
+
+/* EJEMPLO DE PAGINACION PARA UN SP EN MYSQL CON SEQUELIZER
+ var PageNumber = 2;
+ var PageSize = 8;
+ var TotalRows = 0;
+
+ function log(dataObject) {
+
+
+ var dataArray = new Array;
+ for (var o in dataObject) {
+ dataArray.push(dataObject[o]);
+ }
+ }
+
+ conex.query('call sp_Producto_listar(:nombre, :categoria)',
+ {raw: false, replacements: {nombre: 'nuevo', categoria: 1}, type: conex.QueryTypes.SELECT}
+ ).then(function (result) {
+
+
+ var desde = PageSize * (PageNumber - 1);
+ var hasta = PageSize * (PageNumber);
+
+ var lista_Object = result[0];
+
+ var lista_Array = Object.keys(lista_Object).map(function (k) {
+ return lista_Object[k]
+ });
+
+ TotalRows = lista_Array.length;
+
+ var pagina = lista_Array.slice(desde, hasta)
+
+ console.log(pagina);
+ console.log(lista_Array);
+ /*var result3 = [];
+ var keys = Object.keys(dataObject);
+ for (var i = 0, len = keys.length; i < len; i++) {
+ result3.push(dataObject[keys[i]]);
+ }
+
+
+ console.log(result3); */
+/*
+ var dataArray = new Array;
+ for (var o in dataObject) {
+ dataArray.push(dataObject[o]);
+ }* /
+
+
+
+
+ });
  */
+
+//module.exports = Categoria_Model;
+//module.exports = Producto_Model;
+
+//console.log("Sincronizando..");
+//conex.sync({force: true});
+

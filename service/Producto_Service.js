@@ -28,7 +28,8 @@ function Producto_Service() {
 
             TotalRows = lista_Array.length;
 
-            res.send(200, {
+            //res.send(200, {
+            res.send({
                 total: TotalRows,
                 items: lista_Array
             });
@@ -49,13 +50,14 @@ function Producto_Service() {
             prod_Descripcion: producto.prod_Descripcion,
             prod_Precio: producto.prod_Precio,
 
-            prod_FlagActivo: true,
-            prod_FlagEliminado: false,
+            FlagActivo: true,
+            FlagEliminado: false,
 
-            prod_CreadoPor: 'ocruzado',
-            prod_FechaCreacion: new Date()
+            CreadoPor: 'ocruzado',
+            FechaCreacion: new Date()
         }).then(function (obj) {
-            res.send(200, 'obj.prod_IdProducto');
+            //res.send(200, 'obj.prod_IdProducto');
+            res.send(obj.prod_IdProducto);
         });
 
     };
@@ -85,17 +87,17 @@ function Producto_Service() {
         BD.Producto.findById(id)
             .then(function (obj) {
 
-                obj.updateAttributes({
-                    prod_FlagActivo: estado,
-                    prod_ModificadoPor: usuario,
-                    prod_FechaModificacion: new Date(),
-                }).succe
+                return obj.updateAttributes({
+                    FlagActivo: estado,
+                    ModificadoPor: usuario,
+                    FechaModificacion: new Date()
+                });
 
-
-            }).then(function (obj) {
-
-            res.send(200, 'obj.prod_IdProducto');
-        });
+            })
+            .then(function (obj) {
+                //res.send(200, obj.prod_IdProducto);
+                res.send(obj.prod_IdProducto);
+            });
 
 
     };
