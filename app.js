@@ -27,33 +27,11 @@ var upload = multer({
     }
 });
 
-/*
- var upload = multer({
- dest: './upload/',
- rename: function (fieldname, filename) {
- console.log("Rename...");
- return filename + Date.now();
-
- //return fieldname + filename + Date.now()
-
- //return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
- },
- onFileUploadStart: function () {
- console.log("Upload is starting...");
- },
- onFileUploadComplete: function () {
- console.log("File uploaded");
- }
- });
-
- */
-
 var routes = require('./routes');
-
 const app = express();
+
 app.use(bodyparser.urlencoded({extended: true}));
 app.use(bodyparser.json());
-//app.use(multer({
 
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', "*");
@@ -62,21 +40,15 @@ app.use(function (req, res, next) {
     next();
 });
 
-//app.post('/upload', upload.);
-app.post("/upload", upload.array("uploads[]", 12), function (req, res) {
 
-    /*for(var x=0;x<req.files.length;x++) {
-     //copiamos el archivo a la carpeta definitiva de fotos
-     fs.createReadStream('./uploads/'+req.files[x].filename)
-     .pipe(fs.createWriteStream('./public/fotos/'+req.files[x].originalname));
-     //borramos el archivo temporal creado
-     fs.unlink('./uploads/'+req.files[x].filename);
-     }
-     */
+app.post("/upload", upload.array("ImageFile", 12), function (req, res) {
+    var producto = req.body;
+
     res.send(req.files);
-
-
 });
+
+
+
 
 //connection.init();
 routes.configure(app);

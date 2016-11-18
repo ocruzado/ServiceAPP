@@ -1,4 +1,4 @@
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
     return sequelize.define("producto", {
         prod_IdProducto: {
             type: DataTypes.INTEGER,
@@ -23,7 +23,7 @@ module.exports = function(sequelize, DataTypes) {
         },
 
         prod_Precio: {
-            type: DataTypes.DECIMAL(10,2)
+            type: DataTypes.DECIMAL(10, 2)
         },
 
         prod_Tags: {
@@ -48,7 +48,7 @@ module.exports = function(sequelize, DataTypes) {
         FechaModificacion: {
             type: DataTypes.DATE
         }
-    },{
+    }, {
         tableName: 'producto',
         timestamps: false,
         comment: "Tabla de Producto"

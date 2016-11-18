@@ -1,20 +1,20 @@
-//var Connection = require('../conex');
 var BD = require('../conex');
-
-//const sp_listar = "call sp_Producto_listar()";
-//const sp_insertar = "call sp_Producto_insertar(?,?)";
 
 function Producto_Service() {
 
-    this.listar = function (req, res) {
+    this.getList = function (req, res) {
 
         console.log('Producto - listar');
         console.log(req.query);
 
-
         var nombre = req.query.nombre;
         var categoria = req.query.categoria;
 
+        var PageNumber = req.query.PageNumber;
+        var PageSize = req.query.PageSize;
+
+        //var PageNumber = 2;
+        //var PageSize = 4;
 
         BD.Conex.query('call sp_Producto_listar(:nombre, :categoria)',
             {replacements: {nombre: nombre, categoria: categoria}, type: BD.Conex.QueryTypes.SELECT}
@@ -28,80 +28,148 @@ function Producto_Service() {
 
             TotalRows = lista_Array.length;
 
-            //res.send(200, {
+            var desde = PageSize * (PageNumber - 1);
+            var hasta = PageSize * (PageNumber);
+
+            var pagina = lista_Array.slice(desde, hasta)
+
             res.send({
                 total: TotalRows,
-                items: lista_Array
+                items: pagina
+                //items: lista_Array
             });
 
+        }).catch(function (error) {
+            res.status(500).send('Error al listar los productos');
         });
     };
 
+    this.get = function (req, res) {
 
-    this.insertar = function (req, res) {
-        //res.header("Access-Control-Allow-Origin", '*');
+        console.log('Producto - get');
+        console.log(req.query);
+
+        var id = req.query.id;
+
+        BD.Producto.findById(id)
+            .then(function (obj) {
+                res.send(obj);
+            })
+            .catch(function (error) {
+                res.status(500).send('Error al obtener el Producto');
+            });
+
+    };
+
+    this.add = function (req, res) {
+
         console.log('Producto - create');
         console.log(req.body);
 
         var producto = req.body;
+        var usuario = 'ocruzado';
 
-        BD.Producto.create({
+        producto.FlagActivo = true;
+        producto.FlagEliminado = false;
+        producto.CreadoPor = usuario;
+        producto.FechaCreacion = new Date();
+
+        BD.Producto.create(producto)
+            .then(function (obj) {
+
+                return obj.updateAttributes({
+                    prod_Codigo: 'PROD_' + obj.prod_IdProducto
+                });
+
+            })
+            .then(function (obj) {
+                res.send(true);
+            })
+            .catch(function (error) {
+                res.status(500).send('Error al agregar el Producto');
+            });
+
+    };
+
+    this.edit = function (req, res) {
+
+        console.log('Producto - edit');
+        console.log(req.body);
+
+        var producto = req.body;
+        var usuario = 'ocruzado';
+
+        BD.Producto.update({
             prod_Nombre: producto.prod_Nombre,
             prod_Descripcion: producto.prod_Descripcion,
             prod_Precio: producto.prod_Precio,
+            prod_Tags: producto.prod_Tags,
+            FlagActivo: producto.FlagActivo,
 
-            FlagActivo: true,
-            FlagEliminado: false,
-
-            CreadoPor: 'ocruzado',
-            FechaCreacion: new Date()
+            ModificadoPor: usuario,
+            FechaModificacion: new Date()
+        }, {
+            where: {
+                prod_IdProducto: {$eq: producto.prod_IdProducto}
+            }
         }).then(function (obj) {
-            //res.send(200, 'obj.prod_IdProducto');
-            res.send(obj.prod_IdProducto);
+            res.send(true);
+        }).catch(function (error) {
+            res.status(500).send('Error al editar el producto');
+        });
+    };
+
+    this.remove = function (req, res) {
+
+        console.log('Producto - remove');
+        console.log(req.body);
+
+        var id = req.body.id;
+        var usuario = 'ocruzado';
+
+        BD.Producto.update({
+            FlagActivo: false,
+            FlagEliminado: true,
+
+            ModificadoPor: usuario,
+            FechaModificacion: new Date()
+        }, {
+            where: {
+                prod_IdProducto: {$eq: id}
+            }
+        }).then(function (obj) {
+            res.send(true);
+        }).catch(function (error) {
+            res.status(500).send('Error al remover el producto');
         });
 
     };
 
-    this.editar_Estado = function (req, res) {
+    this.edit_Estado = function (req, res) {
 
         console.log('Producto - editar_Estado');
         console.log(req.body);
 
         var id = req.body.id;
         var estado = req.body.estado;
-        var usuario = req.body.usuario;
+        var usuario = 'ocruzado';
 
-        /*
-         BD.Producto.update(
-         {
-         prod_FlagActivo: estado,
-         prod_ModificadoPor: usuario,
-         prod_FechaModificacion: new Date(),
-         }, {
-         where: {
-         prod_IdProducto: id
-         }
-         });*/
+        BD.Producto.update({
+            FlagActivo: estado,
 
-
-        BD.Producto.findById(id)
-            .then(function (obj) {
-
-                return obj.updateAttributes({
-                    FlagActivo: estado,
-                    ModificadoPor: usuario,
-                    FechaModificacion: new Date()
-                });
-
-            })
-            .then(function (obj) {
-                //res.send(200, obj.prod_IdProducto);
-                res.send(obj.prod_IdProducto);
-            });
-
+            ModificadoPor: usuario,
+            FechaModificacion: new Date()
+        }, {
+            where: {
+                prod_IdProducto: {$eq: id}
+            }
+        }).then(function (obj) {
+            res.send(true);
+        }).catch(function (error) {
+            res.status(500).send('Error al editar el estado del producto');
+        });
 
     };
-
 
 }
 

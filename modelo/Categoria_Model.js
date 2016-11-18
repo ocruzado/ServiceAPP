@@ -5,10 +5,12 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
+        cate_Codigo: {
+            type: DataTypes.STRING
+        },
         cate_Nombre: {
             type: DataTypes.STRING
         },
-
         cate_Descripcion: {
             type: DataTypes.TEXT
         },
