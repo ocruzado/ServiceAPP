@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
         },
 
         imag_IdTipo: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
 
         imag_ArchivoNombreOriginal: {
@@ -24,6 +24,9 @@ module.exports = function (sequelize, DataTypes) {
 
         imag_ArchivoNombre: {
             type: DataTypes.STRING
+        },
+        imag_Size: {
+            type: DataTypes.INTEGER
         }
     }, {
         tableName: 'imagen',

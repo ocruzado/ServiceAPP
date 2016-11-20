@@ -36,7 +36,7 @@ module.exports.Categoria = Categoria_Model;
 module.exports.Imagen = Imagen_Model;
 
 // console.log("Sincronizando..");
-// conex.sync({force: true});
+//conex.sync({force: true});
 // console.log("Terminado..");
 
 /*
@@ -72,7 +72,7 @@ for (var i = 1; i < num_Productos; i++) {
         prod_Codigo: 'PROD_' + id,
         prod_Nombre: 'Nuevo Producto  ' + id,
         prod_Descripcion: 'Descripcion ' + id,
-        prod_Detalle: 'Detalle ' + id,
+        prod_Detalle: '<h1>Contenido HTML de Producto ' + id + '</h1>',
         prod_Tags: 'Tag ' + id,
         //Math.floor(Math.random()*(max-min+1)+min); // Nùmero aleatorio entre 2 numeros
         cate_IdCategoria: Math.floor(Math.random() * (20) + 1),

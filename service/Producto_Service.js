@@ -171,6 +171,91 @@ function Producto_Service() {
 
     };
 
+    this.edit_html = function (req, res) {
+
+        console.log('Producto - edit_html');
+        console.log(req.body);
+
+        var producto = req.body;
+        var usuario = 'ocruzado';
+
+        BD.Producto.update({
+            prod_Detalle: producto.prod_Detalle,
+
+            ModificadoPor: usuario,
+            FechaModificacion: new Date()
+        }, {
+            where: {
+                prod_IdProducto: {$eq: producto.prod_IdProducto}
+            }
+        }).then(function (obj) {
+            res.send(true);
+        }).catch(function (error) {
+            res.status(500).send('Error al editar el detalle del producto');
+        });
+    };
+
+    /*
+    this.upload_file = function (req, res) {
+
+        console.log('Producto - upload_file');
+        console.log(req.body);
+
+        var producto = req.body;
+        var usuario = 'ocruzado';
+
+        req.files.forEach(function (file) {
+
+            BD.Imagen.create({
+                imag_Tipo: 2,
+                imag_IdTipo: producto.prod_IdProducto,
+                imag_ArchivoNombreOriginal: file.originalname,
+                imag_ArchivoExtension: file.mimetype,
+
+                imag_ArchivoNombre: file.filename
+
+            })
+                .then(function (obj) {
+                    res.send(true);
+                })
+                .catch(function (error) {
+                    res.status(500).send('Error al agregar el Producto');
+                });
+        });
+
+        /*
+         destination = "C:\WS\ServiceAPP/upload"
+         encoding = "7bit"
+         fieldname = "ImageFile"
+         filename = "1479596819223 - descarga (1).png"
+         mimetype = "image/png"
+         originalname = "descarga (1).png"
+         path = "C:\WS\ServiceAPP\upload\1479596819223 - descarga (1).png"
+         size = 4244
+         * /
+
+        /*
+         BD.Producto.update({
+         prod_Nombre: producto.prod_Nombre,
+         prod_Descripcion: producto.prod_Descripcion,
+         prod_Precio: producto.prod_Precio,
+         prod_Tags: producto.prod_Tags,
+         FlagActivo: producto.FlagActivo,
+
+         ModificadoPor: usuario,
+         FechaModificacion: new Date()
+         }, {
+         where: {
+         prod_IdProducto: {$eq: producto.prod_IdProducto}
+         }
+         }).then(function (obj) {
+         res.send(true);
+         }).catch(function (error) {
+         res.status(500).send('Error al editar el producto');
+         });* /
+    };
+    */
+
 }
 
 module.exports = new Producto_Service();
