@@ -16,3 +16,4 @@ gen
 .idea/modules.xml
 .idea/workspace.xml
 node_modules/
+/public/
